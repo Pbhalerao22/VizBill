@@ -1,0 +1,83 @@
+﻿@model VizBill.MasterDbContext.TblInnoUserMaster
+
+@{
+    ViewData["Title"] = "Create User";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Create New User</h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="Name" class="form-label small"></label>
+                        <input asp-for="Name" class="form-control form-control-sm" placeholder="Enter full name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="Email" class="form-label small"></label>
+                        <input asp-for="Email" class="form-control form-control-sm" placeholder="Enter email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="GoogleId" class="form-label small">Google Id</label>
+                        <input asp-for="GoogleId" class="form-control form-control-sm" placeholder="Enter Google ID" />
+                        <span asp-validation-for="GoogleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label small">Profile Image</label>
+                        <input type="file" name="imageFile" class="form-control form-control-sm" accept="image/*" onchange="previewImage(event)" />
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="IsActive" class="form-label small">Is Active</label>
+                        <select asp-for="IsActive" class="form-select form-select-sm">
+                            <option value="">Select Status</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3 text-center">
+                        <img id="imagePreview" src="#" alt="Preview" 
+                             class="img-thumbnail d-none" 
+                             style="max-height:150px;" />
+                    </div>
+
+                </div>
+
+                <div class="text-end">
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Back</a>
+                    <button type="submit" class="btn btn-sm btn-outline-success">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.classList.remove("d-none");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

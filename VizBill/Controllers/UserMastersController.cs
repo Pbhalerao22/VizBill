@@ -19,12 +19,46 @@ namespace VizBill.Controllers
         }
 
         // GET: TblInnoUserMasters
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page = 1, int pageSize = 1)
         {
-            return View(await _context.TblInnoUserMasters.ToListAsync());
+            var query = _context.TblInnoUserMasters
+                                .Where(x => !x.IsDeleted);
+
+            // 🔍 search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x =>
+                    x.Name.ToLower().Contains(search.Trim().ToLower()) ||
+                    x.Email.ToLower().Contains(search.Trim().ToLower()) ||
+                    x.GoogleId.ToLower().Contains(search.Trim().ToLower()));
+            }
+
+            var totalRecords = await query.CountAsync();
+
+            var users = await query
+                .OrderByDescending(x => x.UserId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new TblInnoUserMaster
+                {
+                    UserId = x.UserId,
+                    Name = x.Name,
+                    Email = x.Email,
+                    GoogleId = x.GoogleId,
+                    ProfileImage = x.ProfileImage,
+                    IsActive = x.IsActive
+                })
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+            ViewBag.search= search;
+
+            return View(users);
         }
 
-        // GET: TblInnoUserMasters/Details/5
+
+        // GET: UserMasters/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -42,29 +76,46 @@ namespace VizBill.Controllers
             return View(tblInnoUserMaster);
         }
 
-        // GET: TblInnoUserMasters/Create
+        // GET: UserMasters/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TblInnoUserMasters/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: UserMasters/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Name,Email,GoogleId,ProfileImage,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoUserMaster tblInnoUserMaster)
+        public async Task<IActionResult> Create(
+            [Bind("Name,Email,GoogleId,IsActive")] TblInnoUserMaster model,
+            IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblInnoUserMaster);
+                // Handle Image Upload
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await imageFile.CopyToAsync(ms);
+                        model.ProfileImage = ms.ToArray();
+                    }
+                }
+
+                // System Managed Fields
+                model.CreatedOn = DateTime.Now;
+                model.CreatedBy = 1; // Replace with logged-in user id
+                model.IsDeleted = false;
+
+                _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblInnoUserMaster);
+
+            return View(model);
         }
 
-        // GET: TblInnoUserMasters/Edit/5
+
+        // GET: UserMasters/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -80,42 +131,55 @@ namespace VizBill.Controllers
             return View(tblInnoUserMaster);
         }
 
-        // POST: TblInnoUserMasters/Edit/5
+        // POST: UserMasters/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("UserId,Name,Email,GoogleId,ProfileImage,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoUserMaster tblInnoUserMaster)
+        public async Task<IActionResult> Edit(long id,
+      [Bind("UserId,Name,Email,GoogleId,IsActive")] TblInnoUserMaster model,
+      IFormFile? imageFile)
         {
-            if (id != tblInnoUserMaster.UserId)
+            if (id != model.UserId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var existingUser = await _context.TblInnoUserMasters.FindAsync(id);
+                if (existingUser == null)
+                    return NotFound();
+
+                // Update editable fields
+                existingUser.Name = model.Name;
+                existingUser.Email = model.Email;
+                existingUser.GoogleId = model.GoogleId;
+                existingUser.IsActive = model.IsActive;
+
+                // Update Image only if new uploaded
+                if (imageFile != null && imageFile.Length > 0)
                 {
-                    _context.Update(tblInnoUserMaster);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblInnoUserMasterExists(tblInnoUserMaster.UserId))
+                    using (var ms = new MemoryStream())
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        await imageFile.CopyToAsync(ms);
+                        existingUser.ProfileImage = ms.ToArray();
                     }
                 }
+
+                // System managed fields
+                existingUser.ModifiedOn = DateTime.Now;
+                existingUser.ModifiedBy = 1; // replace with logged-in user id
+
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblInnoUserMaster);
+
+            return View(model);
         }
 
-        // GET: TblInnoUserMasters/Delete/5
+        // GET: UserMasters/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -133,7 +197,7 @@ namespace VizBill.Controllers
             return View(tblInnoUserMaster);
         }
 
-        // POST: TblInnoUserMasters/Delete/5
+        // POST: UserMasters/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

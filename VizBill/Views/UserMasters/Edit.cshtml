@@ -1,0 +1,100 @@
+﻿@model VizBill.MasterDbContext.TblInnoUserMaster
+
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Edit User</h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" asp-for="UserId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="Name" class="form-label small"></label>
+                        <input asp-for="Name" class="form-control form-control-sm" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="Email" class="form-label small"></label>
+                        <input asp-for="Email" class="form-control form-control-sm" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="GoogleId" class="form-label small">Google Id</label>
+                        <input asp-for="GoogleId" class="form-control form-control-sm" />
+                        <span asp-validation-for="GoogleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label small">Change Profile Image</label>
+                        <input type="file" name="imageFile" class="form-control form-control-sm"
+                               accept="image/*" onchange="previewImage(event)" />
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="IsActive" class="form-label small">Is Active</label>
+                        <select asp-for="IsActive" class="form-select form-select-sm">
+                            <option value="">Select Status</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Existing Image Preview -->
+                    <div class="col-md-3 mb-3 text-center">
+                        @if (Model.ProfileImage != null)
+                        {
+                            var base64 = Convert.ToBase64String(Model.ProfileImage);
+                            var imgSrc = $"data:image/png;base64,{base64}";
+                            <img id="imagePreview" src="@imgSrc"
+                                 class="img-thumbnail"
+                                 style="max-height:150px;" />
+                        }
+                        else
+                        {
+                            <img id="imagePreview" src="#"
+                                 class="img-thumbnail d-none"
+                                 style="max-height:150px;" />
+                        }
+                    </div>
+
+                </div>
+
+                <div class="text-end">
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Back</a>
+                    <button type="submit" class="btn btn-sm btn-outline-warning">Update User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.classList.remove("d-none");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}
