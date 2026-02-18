@@ -1,0 +1,108 @@
+﻿@model IEnumerable<VizBill.MasterDbContext.TblInnoSubscriptionPlanMaster>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PlanName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillingCycle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxBillsPerDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxItems)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WhatsappEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MultiShopEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillingCycle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxBillsPerDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxItems)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WhatsappEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MultiShopEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedBy)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PlanId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PlanId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PlanId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

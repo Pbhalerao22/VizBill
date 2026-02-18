@@ -1,0 +1,316 @@
+﻿@* @model IEnumerable<VizBill.MasterDbContext.TblInnoRoleMaster>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<div class="breadcrumb-header justify-content-between mt-3">
+    <div>
+        <h4 class="content-title mb-2">Role Master</h4>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Create" class="btn btn-outline-primary btn-sm mb-1"><i class="fe fe-plus me-2"></i>Add New</a>
+</div>
+<div class="row">
+    <table id="tblRoleMaster" class="table table-bordered table-responsive-sm compact">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedOn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDeleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedOn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedOn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedBy)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.RoleId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.RoleId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.RoleId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@
+
+
+
+@model IEnumerable<VizBill.MasterDbContext.TblInnoRoleMaster>
+@{
+    ViewData["Title"] = "Role Master";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<style>
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-light: #fff4ec;
+        --pos-dark: #2c2c2c;
+    }
+
+    /* Mobile First POS Styling */
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .pos-header {
+        background: linear-gradient(135deg, #ff6b00, #ff8c42);
+        color: white;
+        border-radius: 12px;
+        padding: 14px 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .pos-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .btn-pos {
+        background-color: var(--pos-orange);
+        border: none;
+        color: white;
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 10px 14px;
+    }
+
+        .btn-pos:hover {
+            background-color: #e65c00;
+            color: white;
+        }
+
+    .pos-card {
+        border: none;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        margin-bottom: 12px;
+    }
+
+    .role-card {
+        background: white;
+        border-left: 5px solid var(--pos-orange);
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .role-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-bottom: 2px;
+    }
+
+    .role-value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--pos-dark);
+    }
+
+    .action-btns a {
+        font-size: 0.8rem;
+        margin-right: 6px;
+        text-decoration: none;
+    }
+
+    .badge-active {
+        background-color: #28a745;
+        font-size: 0.7rem;
+    }
+
+    .badge-deleted {
+        background-color: #dc3545;
+        font-size: 0.7rem;
+    }
+
+    /* Desktop Table Enhancement */
+    @@media (min-width: 768px) {
+        .desktop-table
+
+    {
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .table thead {
+        background-color: var(--pos-orange);
+        color: white;
+    }
+
+    }
+</style>
+
+<!-- POS Header -->
+<div class="container-fluid px-2 mt-3">
+    <div class="pos-header d-flex justify-content-between align-items-center">
+        <h4 class="pos-title">🍔 Role Master</h4>
+        <a asp-action="Create" class="btn btn-light btn-sm fw-semibold">
+            + Add Role
+        </a>
+    </div>
+
+    <!-- Mobile Card View (Primary for POS Devices) -->
+    <div class="d-md-none mt-3">
+        @foreach (var item in Model)
+        {
+            <div class="pos-card role-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="role-label">Role Name</div>
+                        <div class="role-value">@item.RoleName</div>
+                    </div>
+                    <div>
+                        @if (!item.IsDeleted == false)
+                        {
+                            <span class="badge badge-active">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-deleted">Deleted</span>
+                        }
+                    </div>
+                </div>
+
+                <hr class="my-2" />
+
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="role-label">Created On</div>
+                        <div class="role-value">@item.CreatedOn</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="role-label">Created By</div>
+                        <div class="role-value">@item.CreatedBy</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="role-label">Modified On</div>
+                        <div class="role-value">@item.ModifiedOn</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="role-label">Modified By</div>
+                        <div class="role-value">@item.ModifiedBy</div>
+                    </div>
+                </div>
+
+                <div class="mt-3 d-flex justify-content-end action-btns">
+                    <a asp-action="Edit" asp-route-id="@item.RoleId" class="btn btn-sm btn-warning rounded-pill px-3">
+                        Edit
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.RoleId" class="btn btn-sm btn-info rounded-pill px-3">
+                        View
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.RoleId" class="btn btn-sm btn-danger rounded-pill px-3">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Tablet & Desktop Table View -->
+    <div class="d-none d-md-block mt-3">
+        <div class="desktop-table p-2">
+            <div class="table-responsive">
+                <table id="tblRoleMaster" class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Role Name</th>
+                            <th>Status</th>
+                            <th>Created On</th>
+                            <th>Created By</th>
+                            <th>Modified On</th>
+                            <th>Modified By</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.RoleName</td>
+                                <td>
+                                    @if (!item.IsDeleted==false)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Deleted</span>
+                                    }
+                                </td>
+                                <td>@item.CreatedOn</td>
+                                <td>@item.CreatedBy</td>
+                                <td>@item.ModifiedOn</td>
+                                <td>@item.ModifiedBy</td>
+                                <td class="text-end">
+                                    <a asp-action="Edit" asp-route-id="@item.RoleId" class="btn btn-sm btn-warning me-1">
+                                        Edit
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.RoleId" class="btn btn-sm btn-info me-1">
+                                        View
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.RoleId" class="btn btn-sm btn-danger">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        new DataTable('#tblRoleMaster', {
+                responsive: true,
+                autoWidth: false
+            });
+    </script>
+}
+
+

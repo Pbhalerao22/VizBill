@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace VizBill.MasterDbContext;
+
+public partial class TblInnoPaymentModeMaster
+{
+    public long PaymentModeId { get; set; }
+
+    public string ModeName { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
+
+    public DateTime CreatedOn { get; set; }
+
+    public long? CreatedBy { get; set; }
+
+    public DateTime? ModifiedOn { get; set; }
+
+    public long? ModifiedBy { get; set; }
+
+    public virtual ICollection<TblInnoBillMaster> TblInnoBillMasters { get; set; } = new List<TblInnoBillMaster>();
+}

@@ -1,0 +1,69 @@
+﻿@model VizBill.MasterDbContext.TblInnoSubscriptionPlanMaster
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>TblInnoSubscriptionPlanMaster</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PlanName" class="control-label"></label>
+                <input asp-for="PlanName" class="form-control" />
+                <span asp-validation-for="PlanName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillingCycle" class="control-label"></label>
+                <input asp-for="BillingCycle" class="form-control" />
+                <span asp-validation-for="BillingCycle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxBillsPerDay" class="control-label"></label>
+                <input asp-for="MaxBillsPerDay" class="form-control" />
+                <span asp-validation-for="MaxBillsPerDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxItems" class="control-label"></label>
+                <input asp-for="MaxItems" class="form-control" />
+                <span asp-validation-for="MaxItems" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedOn" class="control-label"></label>
+                <input asp-for="ModifiedOn" class="form-control" />
+                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

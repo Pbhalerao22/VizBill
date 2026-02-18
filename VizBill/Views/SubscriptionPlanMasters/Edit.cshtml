@@ -1,0 +1,95 @@
+﻿@model VizBill.MasterDbContext.TblInnoSubscriptionPlanMaster
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>TblInnoSubscriptionPlanMaster</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PlanId" />
+            <div class="form-group">
+                <label asp-for="PlanName" class="control-label"></label>
+                <input asp-for="PlanName" class="form-control" />
+                <span asp-validation-for="PlanName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillingCycle" class="control-label"></label>
+                <input asp-for="BillingCycle" class="form-control" />
+                <span asp-validation-for="BillingCycle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxBillsPerDay" class="control-label"></label>
+                <input asp-for="MaxBillsPerDay" class="form-control" />
+                <span asp-validation-for="MaxBillsPerDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxItems" class="control-label"></label>
+                <input asp-for="MaxItems" class="form-control" />
+                <span asp-validation-for="MaxItems" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WhatsappEnabled" class="control-label"></label>
+                <input asp-for="WhatsappEnabled" class="form-control" />
+                <span asp-validation-for="WhatsappEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MultiShopEnabled" class="control-label"></label>
+                <input asp-for="MultiShopEnabled" class="form-control" />
+                <span asp-validation-for="MultiShopEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedOn" class="control-label"></label>
+                <input asp-for="ModifiedOn" class="form-control" />
+                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
