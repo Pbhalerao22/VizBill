@@ -233,7 +233,7 @@ namespace VizBill.Controllers
         public IActionResult Item()
         {
             int userCode = 1;
-            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefault();
+            var ShopiId = 2;//_context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefault();
 
             var ListItem = (from s in _context.TblInnoItemMasters
                             join ca in _context.TblInnoCategoryMasters on s.CategoryId equals ca.CategoryId
@@ -256,11 +256,20 @@ namespace VizBill.Controllers
 
         public IActionResult Setting()
         {
+            int userCode = 1;
+            int ShopId = 2;
+            ViewBag.ShopDetails=_context.TblInnoShopMasters.Where(w=>w.OwnerUserId== userCode && w.ShopId== ShopId).Select(s=>new {s.ShopId,s.ShopName,s.CompanyLogo,s.AdvertisementMsg,s.WhatsappNumber}).ToList();
+
+           
             return View();
         }
 
         public IActionResult ShopSelection()
         {
+            int userCode = 1;
+            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => new { s.ShopId,s.ShopName,s.ShopCategory,s.IsActive}).ToList();
+
+            ViewBag.OwnerShops = ShopiId;
             return View();
         }
 

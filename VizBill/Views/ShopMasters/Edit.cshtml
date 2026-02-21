@@ -1,24 +1,29 @@
-﻿@model VizBill.MasterDbContext.TblInnoShopMaster
+﻿@* @model VizBill.MasterDbContext.TblInnoShopMaster
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout_1.cshtml";
+    Layout = "~/Views/Shared/Login_Layout.cshtml";
 }
 
 <h1>Edit</h1>
 
-<h4>TblInnoShopMaster</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ShopId" />
-            <div class="form-group">
-                <label asp-for="OwnerUserId" class="control-label"></label>
-                <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
-                <span asp-validation-for="OwnerUserId" class="text-danger"></span>
+          
+            <div class="form-group-pos">
+                <label asp-for="OwnerUserId" class="form-label-pos">Owner</label>
+                <select asp-for="OwnerUserId" class="form-control-pos">
+                    @foreach (var item in ViewBag.OwnerDrop)
+                    {
+                        <option value="@item.UserId">@item.Name</option>
+                    }
+                </select>
             </div>
+
             <div class="form-group">
                 <label asp-for="ShopName" class="control-label"></label>
                 <input asp-for="ShopName" class="form-control" />
@@ -39,41 +44,47 @@
                 <input asp-for="AdvertisementMsg" class="form-control" />
                 <span asp-validation-for="AdvertisementMsg" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CompanyLogo" class="control-label"></label>
-                <input asp-for="CompanyLogo" class="form-control" />
-                <span asp-validation-for="CompanyLogo" class="text-danger"></span>
+         
+
+            <!-- Existing Image Preview -->
+            <div class="col-md-3 mb-3 text-center">
+                @if (Model.CompanyLogo != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.CompanyLogo);
+                    var imgSrc = $"data:image/png;base64,{base64}";
+                    <img id="imagePreview" src="@imgSrc"
+                         class="img-thumbnail"
+                         style="max-height:150px;" />
+                }
+                else
+                {
+                    <img id="imagePreview" src="#"
+                         class="img-thumbnail d-none"
+                         style="max-height:150px;" />
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="IsActive" class="control-label"></label>
-                <input asp-for="IsActive" class="form-control" />
-                <span asp-validation-for="IsActive" class="text-danger"></span>
+
+
+            <div class="col-md-3 mb-3">
+                <label asp-for="IsActive" class="form-label small">Is Active</label>
+                <select asp-for="IsActive" class="form-select form-select-sm">
+                    <option value="">Select Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
             </div>
+
+
+
+
+
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control" />
-                <span asp-validation-for="CreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedOn" class="control-label"></label>
-                <input asp-for="ModifiedOn" class="form-control" />
-                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-            </div>
+        
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -87,4 +98,266 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+
+                    @model VizBill.MasterDbContext.TblInnoShopMaster
+
+@{
+    ViewData["Title"] = "Edit Shop";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<style>
+    /* ===================================
+           POS THEME V1 - ORANGE (Edit Shop)
+           Mobile First | Centered Layout
+        =================================== */
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-bg: #f5f6f8;
+        --pos-border: #e9ecef;
+        --text-muted: #6c757d;
+    }
+
+    body {
+        background: var(--pos-bg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Centered Wrapper (NO CARD) */
+    .page-wrapper {
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 24px 16px 100px;
+    }
+
+    /* Header */
+    .page-title {
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 4px;
+        color: #212529;
+    }
+
+    .page-subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+
+    /* Form Groups */
+    .form-group-pos {
+        margin-bottom: 18px;
+    }
+
+    .form-label-pos {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-control-pos {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--pos-border);
+        padding: 14px 16px;
+        font-size: 15px;
+        background: #fff;
+        transition: 0.2s ease;
+    }
+
+        .form-control-pos:focus {
+            border-color: var(--pos-orange);
+            box-shadow: 0 0 0 2px rgba(255,107,0,0.1);
+            outline: none;
+        }
+
+    .form-select-pos {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--pos-border);
+        padding: 14px 16px;
+        font-size: 15px;
+        background: #fff;
+    }
+
+    /* Toggle Row */
+    .switch-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        border: 1px solid var(--pos-border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+    }
+
+    /* Image Preview */
+    .logo-preview {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+        .logo-preview img {
+            max-height: 150px;
+            border-radius: 12px;
+            border: 1px solid var(--pos-border);
+            padding: 6px;
+            background: #fff;
+        }
+
+    /* Primary Button */
+    .btn-pos {
+        width: 100%;
+        background: var(--pos-orange);
+        color: #fff;
+        border: none;
+        padding: 16px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 10px;
+        transition: 0.2s ease;
+    }
+
+        .btn-pos:hover {
+            background: #e65c00;
+        }
+
+    /* Secondary Button */
+    .btn-secondary-pos {
+        width: 100%;
+        background: #fff;
+        color: #212529;
+        border: 1px solid var(--pos-border);
+        padding: 14px;
+        border-radius: 14px;
+        font-weight: 600;
+        text-align: center;
+        display: block;
+        margin-top: 12px;
+        text-decoration: none;
+    }
+
+        .btn-secondary-pos:hover {
+            background: #f8f9fa;
+            text-decoration: none;
+            color: #212529;
+        }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <!-- Title -->
+    <div class="page-title">Edit Shop</div>
+    <div class="page-subtitle">Update your shop details</div>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="ShopId" />
+
+        <!-- Owner -->
+        <div class="form-group-pos">
+            <label asp-for="OwnerUserId" class="form-label-pos">Owner</label>
+            <select asp-for="OwnerUserId" class="form-control-pos">
+                @foreach (var item in ViewBag.OwnerDrop)
+                {
+                    <option value="@item.UserId">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- Shop Name -->
+        <div class="form-group-pos">
+            <label asp-for="ShopName" class="form-label-pos">Shop Name</label>
+            <input asp-for="ShopName" class="form-control-pos" placeholder="e.g. Raju Tea Corner" />
+            <span asp-validation-for="ShopName" class="text-danger"></span>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group-pos">
+            <label asp-for="ShopCategory" class="form-label-pos">Shop Category</label>
+            <input asp-for="ShopCategory" class="form-control-pos" placeholder="Tea Stall / Fast Food / Juice" />
+            <span asp-validation-for="ShopCategory" class="text-danger"></span>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="form-group-pos">
+            <label asp-for="WhatsappNumber" class="form-label-pos">WhatsApp Number</label>
+            <input asp-for="WhatsappNumber" class="form-control-pos" placeholder="e.g. 9876543210" />
+            <span asp-validation-for="WhatsappNumber" class="text-danger"></span>
+        </div>
+
+        <!-- Advertisement -->
+        <div class="form-group-pos">
+            <label asp-for="AdvertisementMsg" class="form-label-pos">Advertisement Message</label>
+            <input asp-for="AdvertisementMsg" class="form-control-pos" placeholder="Special offer message..." />
+            <span asp-validation-for="AdvertisementMsg" class="text-danger"></span>
+        </div>
+
+        <!-- Existing Logo Preview -->
+        <div class="form-group-pos">
+            <label class="form-label-pos">Company Logo</label>
+
+            <div class="logo-preview">
+                @if (Model.CompanyLogo != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.CompanyLogo);
+                    var imgSrc = $"data:image/png;base64,{base64}";
+                    <img id="imagePreview" src="@imgSrc" />
+                }
+                else
+                {
+                    <img id="imagePreview" src="#" style="display:none;" />
+                }
+            </div>
+        </div>
+
+        <!-- Is Active -->
+        <div class="form-group-pos">
+            <label asp-for="IsActive" class="form-label-pos">Shop Status</label>
+            <select asp-for="IsActive" class="form-select-pos">
+                <option value="">Select Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Is Deleted Toggle -->
+        <div class="switch-row">
+            <label class="form-label-pos mb-0">
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </label>
+            <input class="form-check-input" asp-for="IsDeleted" style="width:20px;height:20px;" />
+        </div>
+
+        <!-- Save Button -->
+        <button type="submit" class="btn-pos">
+            Save Changes
+        </button>
+
+        <!-- Back Button -->
+        <a href="/Main/Setting" class="btn-secondary-pos">
+            ← Back to List
+        </a>
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

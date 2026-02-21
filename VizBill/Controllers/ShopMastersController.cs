@@ -48,6 +48,7 @@ namespace VizBill.Controllers
         public IActionResult Create()
         {
             ViewData["OwnerUserId"] = new SelectList(_context.TblInnoUserMasters, "UserId", "UserId");
+            ViewBag.OwnerDrop = _context.TblInnoUserMasters.Select(s => new { s.UserId, s.Name }).ToList();
             return View();
         }
 
@@ -56,15 +57,34 @@ namespace VizBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShopId,OwnerUserId,ShopName,ShopCategory,WhatsappNumber,AdvertisementMsg,CompanyLogo,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoShopMaster tblInnoShopMaster)
+        public async Task<IActionResult> Create([Bind("ShopId,OwnerUserId,ShopName,ShopCategory,WhatsappNumber,AdvertisementMsg,CompanyLogo")] TblInnoShopMaster tblInnoShopMaster, IFormFile? imageFile)
         {
+            ModelState.Remove("OwnerUser");
             if (ModelState.IsValid)
             {
+
+
+                // Handle Image Upload
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await imageFile.CopyToAsync(ms);
+                        tblInnoShopMaster.CompanyLogo = ms.ToArray();
+                    }
+                }
+
+                tblInnoShopMaster.CreatedBy = 1;
+                tblInnoShopMaster.CreatedOn = DateTime.Now;
+                tblInnoShopMaster.IsActive = true;
+
                 _context.Add(tblInnoShopMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("ShopSelection", "Main");
             }
             ViewData["OwnerUserId"] = new SelectList(_context.TblInnoUserMasters, "UserId", "UserId", tblInnoShopMaster.OwnerUserId);
+
             return View(tblInnoShopMaster);
         }
 
@@ -82,6 +102,7 @@ namespace VizBill.Controllers
                 return NotFound();
             }
             ViewData["OwnerUserId"] = new SelectList(_context.TblInnoUserMasters, "UserId", "UserId", tblInnoShopMaster.OwnerUserId);
+            ViewBag.OwnerDrop = _context.TblInnoUserMasters.Select(s => new { s.UserId, s.Name }).ToList();
             return View(tblInnoShopMaster);
         }
 
@@ -90,17 +111,33 @@ namespace VizBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("ShopId,OwnerUserId,ShopName,ShopCategory,WhatsappNumber,AdvertisementMsg,CompanyLogo,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoShopMaster tblInnoShopMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("ShopId,OwnerUserId,ShopName,ShopCategory,WhatsappNumber,AdvertisementMsg,CompanyLogo,IsActive,IsDeleted")] TblInnoShopMaster tblInnoShopMaster, IFormFile? imageFile)
         {
             if (id != tblInnoShopMaster.ShopId)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("OwnerUser");
             if (ModelState.IsValid)
             {
                 try
                 {
+
+                    // Handle Image Upload
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            await imageFile.CopyToAsync(ms);
+                            tblInnoShopMaster.CompanyLogo = ms.ToArray();
+                        }
+                    }
+
+
+                    tblInnoShopMaster.ModifiedBy = 1;
+                    tblInnoShopMaster.ModifiedOn = DateTime.Now;
+
                     _context.Update(tblInnoShopMaster);
                     await _context.SaveChangesAsync();
                 }

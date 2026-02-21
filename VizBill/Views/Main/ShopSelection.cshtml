@@ -1,4 +1,9 @@
-﻿<!-- Bootstrap 5 -->
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Login_Layout.cshtml";
+}
+
+<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -164,6 +169,29 @@
         <div class="title">Your Shops</div>
         <div class="subtitle">Select a shop to manage</div>
 
+
+        @foreach (var item in ViewBag.OwnerShops)
+        {
+            <div class="shop-card">
+                <div class="shop-left">
+                    @* <div class="shop-icon">🏪</div> *@
+                    <div>
+                        <p class="shop-name">@item.ShopName</p>
+                        <div class="shop-type">@item.ShopCategory</div>
+                        <div class="d-none">@item.ShopId</div>
+                    </div>
+                </div>
+
+                @if(item.IsActive==true){
+                <span class="status-pill active">Active</span>
+                }
+                else{
+                <span class="status-pill expired">In-Active</span>
+                }
+            </div>
+        }
+
+@* 
         <!-- Shop 1 -->
         <div class="shop-card">
             <div class="shop-left">
@@ -198,11 +226,11 @@
                 </div>
             </div>
             <span class="status-pill expired">Expired</span>
-        </div>
+        </div> *@
 
     </div>
 </div>
 
 <!-- Floating Add Button -->
-<button class="fab-btn">+</button>
+<a class="btn fab-btn" href="/ShopMasters/Create">+</a>
 
