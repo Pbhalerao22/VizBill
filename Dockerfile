@@ -10,4 +10,4 @@ RUN dotnet publish -c Release -o /app
 FROM :/mcr.microsoft.com
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "VizBille.dll"]
+ENTRYPOINT ["dotnet", "VizBill.dll"]
