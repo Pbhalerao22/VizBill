@@ -1,11 +1,15 @@
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-# Ensure "VizBill.csproj" matches your actual .csproj filename exactly
-COPY ["VizBill.csproj", "./"]
-RUN dotnet restore
+
+# Copy the csproj from the subfolder
+COPY ["VizBill/VizBill.csproj", "VizBill/"]
+RUN dotnet restore "VizBill/VizBill.csproj"
+
+# Copy everything and build
 COPY . .
-RUN dotnet publish -c Release -o /app
+WORKDIR "/src/VizBill"
+RUN dotnet publish "VizBill.csproj" -c Release -o /app
 
 # Run stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
