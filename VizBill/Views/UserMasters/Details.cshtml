@@ -1,0 +1,99 @@
+﻿@model VizBill.MasterDbContext.TblInnoUserMaster
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">User Details</h3>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+
+                <!-- Profile Image -->
+                <div class="me-md-4 mb-3 mb-md-0">
+                    @if (Model.ProfileImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(Model.ProfileImage);
+                        var imgSrc = $"data:image/png;base64,{base64}";
+                        <img src="@imgSrc" alt="Profile Image"
+                             class="rounded-circle border"
+                             style="width:120px; height:120px; object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                             style="width:120px; height:120px; color: white; font-weight: 600; font-size: 2rem;">
+                            @Model.Name?.Substring(0,1).ToUpper()
+                        </div>
+                    }
+                </div>
+
+                <!-- User Info -->
+                <div class="flex-grow-1">
+
+                    <h4 class="mb-2">@Model.Name</h4>
+                    <p class="mb-1"><strong>Email:</strong> @Model.Email</p>
+                    <p class="mb-1"><strong>Google ID:</strong> @Model.GoogleId</p>
+
+                    <p class="mb-1">
+                        <strong>Status:</strong>
+                        @if (Model.IsActive == true)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactive</span>
+                        }
+                    </p>
+
+                    <p class="mb-1">
+                        <strong>Deleted:</strong>
+                        @if (Model.IsDeleted)
+                        {
+                            <span class="badge bg-danger">Yes</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">No</span>
+                        }
+                    </p>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Metadata -->
+            <dl class="row">
+                <dt class="col-sm-4 text-muted">Created On</dt>
+                <dd class="col-sm-8">@Model.CreatedOn.ToString("g")</dd>
+
+                <dt class="col-sm-4 text-muted">Created By</dt>
+                <dd class="col-sm-8">@Model.CreatedBy?.ToString() ?? "N/A"</dd>
+
+                <dt class="col-sm-4 text-muted">Modified On</dt>
+                <dd class="col-sm-8">@Model.ModifiedOn?.ToString("g") ?? "N/A"</dd>
+
+                <dt class="col-sm-4 text-muted">Modified By</dt>
+                <dd class="col-sm-8">@Model.ModifiedBy?.ToString() ?? "N/A"</dd>
+            </dl>
+
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-sm btn-warning">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn btn-sm btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+</div>
