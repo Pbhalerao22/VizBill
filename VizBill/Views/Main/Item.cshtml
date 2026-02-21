@@ -291,53 +291,7 @@
 </style>
 
 
-<!-- Overlay Add Item Page -->
-<div class="add-item-overlay" id="addItemOverlay">
-    <div class="page-wrapper">
 
-        <!-- Header -->
-        <div class="page-header">
-            <div class="page-title">Add Item</div>
-            <div class="close-btn" id="closeAddItem">&times;</div>
-        </div>
-
-        <!-- Item Name -->
-        <div class="form-group">
-            <label class="form-label">Item Name</label>
-            <input type="text" class="form-control" placeholder="e.g. Masala Chai">
-        </div>
-
-        <!-- Price -->
-        <div class="form-group">
-            <label class="form-label">Price (₹)</label>
-            <input type="number" class="form-control" placeholder="e.g. 20">
-        </div>
-
-        <!-- Category -->
-        <div class="form-group">
-            <label class="form-label">Category</label>
-            <div class="category-options">
-
-                @foreach (var item in ViewBag.ItemList)
-                {
-                   
-                    <button type="button" class="category-pill">@item.CategoryName</button>
-                }
-
-
-
-@* 
-                <button type="button" class="category-pill">Drinks</button>
-                <button type="button" class="category-pill active">Snacks</button>
-                <button type="button" class="category-pill">Fast Food</button> *@
-            </div>
-        </div>
-
-        <!-- Add Button -->
-        <button class="submit-btn">Add Item</button>
-
-    </div>
-</div>
 
 <div class="app-wrapper">
 
@@ -385,8 +339,9 @@
                     </div>
                 </div>
                 <div class="action-icons">
-                    <i class="bi bi-pencil edit-icon" title="Edit" onclick="EditItem(@item.ItemId)"></i>
-                    <i class="bi bi-trash delete-icon" title="Delete" onclick="DeleteItem(@item.ItemId)"></i>
+                    <a href="/ItemMasters/Edit?id=@item.ItemId"><i class="bi bi-pencil edit-icon" title="Edit"></i></a>
+                    <a href="/ItemMasters/Delete?id=@item.ItemId"><i class="bi bi-trash delete-icon" title="Delete"></i></a>
+                    
                 </div>
             </div>
         }
@@ -480,9 +435,9 @@
 </div>
 
 <!-- Floating Add Button -->
-<button class="fab mb-5" id="openAddItem" title="Add Item">
+<a class="btn fab mb-5" id="openAddItem" href="/ItemMasters/Create" title="Add Item">
     <i class="bi bi-plus"></i>
-</button>
+</a>
 
 <script>
     /* Category Filter */
@@ -523,25 +478,25 @@
         alert(itemid);
     }
 
-    // Open overlay on FAB click
-    document.getElementById("openAddItem").addEventListener("click", function () {
-        document.getElementById("addItemOverlay").classList.add("show");
-        document.body.style.overflow = "hidden"; // lock background scroll
-    });
+    // // Open overlay on FAB click
+    // document.getElementById("openAddItem").addEventListener("click", function () {
+    //     document.getElementById("addItemOverlay").classList.add("show");
+    //     document.body.style.overflow = "hidden"; // lock background scroll
+    // });
 
-    // Close overlay on X click
-    document.getElementById("closeAddItem").addEventListener("click", function () {
-        document.getElementById("addItemOverlay").classList.remove("show");
-        document.body.style.overflow = "auto";
-    });
+    // // Close overlay on X click
+    // document.getElementById("closeAddItem").addEventListener("click", function () {
+    //     document.getElementById("addItemOverlay").classList.remove("show");
+    //     document.body.style.overflow = "auto";
+    // });
 
-    // Category pill active toggle
-    document.querySelectorAll('.category-pill').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
+    // // Category pill active toggle
+    // document.querySelectorAll('.category-pill').forEach(btn => {
+    //     btn.addEventListener('click', function () {
+    //         document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
+    //         this.classList.add('active');
+    //     });
+    // });
 
 
 </script>

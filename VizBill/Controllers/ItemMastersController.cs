@@ -49,7 +49,10 @@ namespace VizBill.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.TblInnoCategoryMasters, "CategoryId", "CategoryId");
-            ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId");
+            //ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId");
+
+            ViewBag.CategoryDrop = _context.TblInnoCategoryMasters.Where(w=>w.CreatedBy==1).Select(s => new { s.CategoryId, s.CategoryName }).ToList();
+
             return View();
         }
 
@@ -58,13 +61,19 @@ namespace VizBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,ShopId,CategoryId,ItemName,Price,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoItemMaster tblInnoItemMaster)
+        public async Task<IActionResult> Create([Bind("ItemId,CategoryId,ItemName,Price")] TblInnoItemMaster tblInnoItemMaster)
         {
+            ModelState.Remove("Key");
             if (ModelState.IsValid)
             {
+                tblInnoItemMaster.IsActive = true;
+                tblInnoItemMaster.CreatedOn = DateTime.Now;
+                tblInnoItemMaster.CreatedBy = 1;
+                tblInnoItemMaster.ShopId = 2;
                 _context.Add(tblInnoItemMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Item","Main");
+                //return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.TblInnoCategoryMasters, "CategoryId", "CategoryId", tblInnoItemMaster.CategoryId);
             ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId", tblInnoItemMaster.ShopId);
@@ -84,8 +93,10 @@ namespace VizBill.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.TblInnoCategoryMasters, "CategoryId", "CategoryId", tblInnoItemMaster.CategoryId);
-            ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId", tblInnoItemMaster.ShopId);
+            //ViewData["CategoryId"] = new SelectList(_context.TblInnoCategoryMasters, "CategoryId", "CategoryId", tblInnoItemMaster.CategoryId);
+            //ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId", tblInnoItemMaster.ShopId);
+
+            ViewBag.CategoryDrop = _context.TblInnoCategoryMasters.Where(w => w.CreatedBy == 1).Select(s => new { s.CategoryId, s.CategoryName }).ToList();
             return View(tblInnoItemMaster);
         }
 
@@ -94,17 +105,20 @@ namespace VizBill.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("ItemId,ShopId,CategoryId,ItemName,Price,IsActive,IsDeleted,CreatedOn,CreatedBy,ModifiedOn,ModifiedBy")] TblInnoItemMaster tblInnoItemMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("ItemId,CategoryId,ItemName,Price,IsActive,IsDeleted")] TblInnoItemMaster tblInnoItemMaster)
         {
-            if (id != tblInnoItemMaster.ItemId)
-            {
-                return NotFound();
-            }
-
+            //if (id != tblInnoItemMaster.ItemId)
+            //{
+            //    return NotFound();
+            //}
+            ModelState.Remove("Key");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    tblInnoItemMaster.ModifiedOn = DateTime.Now;
+                    tblInnoItemMaster.ModifiedBy = 1;
+                    tblInnoItemMaster.ShopId=2;
                     _context.Update(tblInnoItemMaster);
                     await _context.SaveChangesAsync();
                 }
@@ -119,7 +133,8 @@ namespace VizBill.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Item","Main");
             }
             ViewData["CategoryId"] = new SelectList(_context.TblInnoCategoryMasters, "CategoryId", "CategoryId", tblInnoItemMaster.CategoryId);
             ViewData["ShopId"] = new SelectList(_context.TblInnoShopMasters, "ShopId", "ShopId", tblInnoItemMaster.ShopId);
