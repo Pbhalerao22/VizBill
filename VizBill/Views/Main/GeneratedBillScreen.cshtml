@@ -1,0 +1,214 @@
+﻿ <!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    /* ===================================
+       POS THEME V1 - BILL SUCCESS (CENTERED)
+    =================================== */
+
+    .success-center {
+        min-height: calc(100vh - 120px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Success Icon Circle */
+    .success-circle {
+        width: 110px;
+        height: 110px;
+        background: #e6f7ed;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+    }
+
+        .success-circle i {
+            font-size: 48px;
+            color: #198754;
+        }
+
+    /* Title */
+    .success-title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    /* Amount (Orange Highlight) */
+    .success-amount {
+        font-size: 42px;
+        font-weight: 800;
+        color: var(--pos-orange);
+        margin-bottom: 6px;
+    }
+
+    /* Token */
+    .success-token {
+        color: var(--text-muted);
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    /* Payment Mode Chip */
+    .payment-chip {
+        background: #e6f7ed;
+        color: #198754;
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 32px;
+    }
+
+    /* Primary Button (Exact POS Orange CTA) */
+    .new-bill-btn {
+        width: 320px;
+        max-width: 100%;
+        border: none;
+        border-radius: 14px;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        background: var(--pos-orange);
+        color: #fff;
+        margin-bottom: 18px;
+        transition: 0.2s ease;
+    }
+
+        .new-bill-btn:hover {
+            background: #e65c00;
+        }
+
+    /* Bottom Action Buttons */
+    .success-actions {
+        display: flex;
+        gap: 14px;
+        width: 320px;
+        max-width: 100%;
+    }
+
+    /* Soft Secondary Buttons (POS style) */
+    .action-btn {
+        flex: 1;
+        border-radius: 14px;
+        padding: 14px;
+        font-weight: 600;
+        border: 1px solid var(--card-border);
+        background: #fff;
+        transition: 0.2s ease;
+    }
+
+        .action-btn:hover {
+            background: var(--pos-orange-light);
+        }
+
+        .action-btn.whatsapp {
+            color: #25D366;
+        }
+
+        .action-btn.print {
+            color: #333;
+        }
+
+    /* Mobile Optimization */
+    @@media (max-width: 576px) {
+        .success-title {
+            font-size: 22px;
+        }
+
+        .success-amount {
+            font-size: 36px;
+        }
+
+        .success-center {
+            min-height: calc(100vh - 90px);
+        }
+    }
+</style>
+
+<div class="app-wrapper">
+
+    <div class="success-center">
+
+        <!-- Success Icon -->
+        <div class="success-circle">
+            <i class="bi bi-check-lg"></i>
+        </div>
+
+        <!-- Title -->
+        <div class="success-title">Bill Generated!</div>
+
+        <!-- Amount -->
+        <div class="success-amount">
+            ₹<span id="successAmount">@ViewBag.Amount</span>
+        </div>
+
+        <!-- Token -->
+        <div class="success-token">
+            Token #<span id="tokenNo">@ViewBag.Token</span>
+        </div>
+
+        <!-- Payment Mode -->
+        <div class="payment-chip" id="paymentModeChip">@ViewBag.paymentMode</div>
+
+        <!-- New Bill Button -->
+        <button class="new-bill-btn" id="newBillBtn">
+            New Bill
+        </button>
+
+        <!-- Action Buttons -->
+        <div class="success-actions">
+            <button class="action-btn whatsapp" id="whatsappBtn">
+                <i class="bi bi-whatsapp"></i> WhatsApp
+            </button>
+
+            <button class="action-btn print" id="printBtn">
+                <i class="bi bi-printer"></i> Print
+            </button>
+        </div>
+
+    </div>
+
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function showBillSuccess(total, token, paymentMode) {
+        $('#successAmount').text(total);
+        $('#tokenNo').text(token);
+        $('#paymentModeChip').text(paymentMode);
+    }
+
+    /* New Bill Click */
+    $('#newBillBtn').on('click', function () {
+        // Reset cart
+        cart = {};
+     
+        // Redirect to billing screen (your main POS page)
+        window.location.href = '/Main/Bill';
+    });
+
+    /* Print */
+    $('#printBtn').on('click', function () {
+        window.print();
+    });
+
+    /* WhatsApp Share */
+    $('#whatsappBtn').on('click', function () {
+        // let amt = $('#successAmount').text();
+        // let token = $('#tokenNo').text();
+
+        // let msg = `Token #${token}\nBill Amount: ₹${amt}\nThank you!`;
+        // window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+</script>

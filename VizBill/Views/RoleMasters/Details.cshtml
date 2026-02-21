@@ -1,55 +1,183 @@
 ﻿@model VizBill.MasterDbContext.TblInnoRoleMaster
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Role Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<style>
+    /* ============================
+       SMART BILLING POS ORANGE THEME
+       (Consistent with Create & Edit)
+    ============================ */
 
-<div>
-    <h4>TblInnoRoleMaster</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RoleId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-dark: #e65c00;
+        --pos-bg: #fff7f0;
+        --pos-border: #ffe2cc;
+    }
+
+    body {
+        background-color: var(--pos-bg);
+    }
+
+    /* Center in Web Mode */
+    .pos-page-container {
+        max-width: 520px;
+        margin: auto;
+    }
+
+    /* POS Card */
+    .pos-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid var(--pos-border);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        padding: 20px;
+    }
+
+    /* Title */
+    .pos-title {
+        font-weight: 600;
+        color: var(--pos-orange-dark);
+        font-size: 20px;
+    }
+
+    /* Detail rows */
+    .pos-detail-row {
+        padding: 10px 0;
+        border-bottom: 1px solid #fff1e6;
+    }
+
+    .pos-detail-label {
+        font-weight: 600;
+        color: #444;
+        font-size: 14px;
+    }
+
+    .pos-detail-value {
+        font-size: 14px;
+        color: #222;
+        text-align: right;
+        word-break: break-word;
+    }
+
+    /* Buttons */
+    .btn-pos {
+        background-color: var(--pos-orange);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .btn-pos:hover {
+        background-color: var(--pos-orange-dark);
+        color: #fff;
+    }
+
+    .btn-back {
+        border-radius: 10px;
+        border: 1px solid var(--pos-border);
+        background: #fff;
+        padding: 10px 18px;
+        font-weight: 500;
+    }
+
+    .btn-back:hover {
+        background: #fff3eb;
+        border-color: var(--pos-orange);
+        color: var(--pos-orange-dark);
+    }
+
+    @@media (max-width: 576px) {
+        .pos-card {
+            padding: 16px;
+        }
+        .pos-detail-value {
+            text-align: right;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-3">
+    <div class="pos-page-container">
+
+        <!-- Header -->
+        <div class="mb-3">
+            <h4 class="pos-title mb-1">📋 Role Details</h4>
+            <small class="text-muted">View role information</small>
+        </div>
+
+        <!-- Details Card -->
+        <div class="pos-card">
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.RoleName)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.IsDeleted)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.CreatedOn)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.CreatedOn)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.CreatedBy)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.ModifiedOn)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between border-0">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.ModifiedBy)
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-back">
+                    ← Back to List
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model?.RoleId" class="btn btn-pos">
+                    ✏️ Edit Role
+                </a>
+            </div>
+
+        </div>
+    </div>
 </div>

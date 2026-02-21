@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports - POS</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ===================================
+   POS THEME V1 - ORANGE (Reports UI)
+=================================== */
+:root {
+    --pos-orange: #ff6b00;
+    --pos-orange-light: #fff3eb;
+    --pos-bg: #f5f6f8;
+    --card-border: #e9ecef;
+    --text-muted: #6c757d;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --primary-blue: #2563eb;
+}
+
+body {
+    background: var(--pos-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-wrapper {
+    max-width: 1100px;
+    margin: auto;
+    padding: 16px;
+    padding-bottom: 40px;
+}
+
+/* Title */
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+/* Filter Chips */
+.filter-chips {
+    margin-bottom: 18px;
+}
+
+.chip {
+    border: none;
+    background: #fff;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-weight: 500;
+    margin-right: 8px;
+    border: 1px solid var(--card-border);
+    transition: 0.2s ease;
+}
+
+.chip.active {
+    background: var(--pos-orange);
+    color: #fff;
+    border-color: var(--pos-orange);
+}
+
+.chip:hover {
+    background: var(--pos-orange-light);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid var(--card-border);
+    height: 100%;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.stat-green {
+    color: var(--success);
+}
+
+.stat-blue {
+    color: var(--primary-blue);
+}
+
+.trend-up {
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.trend-down {
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Section Title */
+.section-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 20px 0 12px;
+}
+
+/* Top Selling List */
+.top-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--card-border);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rank-badge {
+    background: var(--pos-orange-light);
+    color: var(--pos-orange);
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 13px;
+    margin-right: 12px;
+}
+
+.item-name {
+    font-weight: 600;
+}
+
+.item-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.item-amount {
+    font-weight: 700;
+}
+
+/* Responsive */
+@@media (max-width: 576px) {
+    .stat-value {
+        font-size: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+    <!-- Page Title -->
+    <div class="page-title">Reports</div>
+
+    <!-- Filter Chips -->
+    <div class="filter-chips">
+        <button class="chip active" onclick="setFilter(this)">Today</button>
+        <button class="chip" onclick="setFilter(this)">This Week</button>
+        <button class="chip" onclick="setFilter(this)">This Month</button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value">₹4,250</div>
+                <div class="trend-up">↗ +12%</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="stat-card">
+                <div class="stat-label">Total Orders</div>
+                <div class="stat-value">38</div>
+                <div class="trend-down">↘ -3%</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="stat-card">
+                <div class="stat-label">Cash Payments</div>
+                <div class="stat-value stat-green">₹2,800</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="stat-card">
+                <div class="stat-label">UPI Payments</div>
+                <div class="stat-value stat-blue">₹1,450</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Selling Items -->
+    <div class="section-title">Top Selling Items</div>
+
+    <div class="top-item">
+        <div class="d-flex align-items-center">
+            <div class="rank-badge">#1</div>
+            <div>
+                <div class="item-name">Chai</div>
+                <div class="item-sub">45 sold</div>
+            </div>
+        </div>
+        <div class="item-amount">₹675</div>
+    </div>
+
+    <div class="top-item">
+        <div class="d-flex align-items-center">
+            <div class="rank-badge">#2</div>
+            <div>
+                <div class="item-name">Samosa</div>
+                <div class="item-sub">32 sold</div>
+            </div>
+        </div>
+        <div class="item-amount">₹480</div>
+    </div>
+
+    <div class="top-item">
+        <div class="d-flex align-items-center">
+            <div class="rank-badge">#3</div>
+            <div>
+                <div class="item-name">Sandwich</div>
+                <div class="item-sub">28 sold</div>
+            </div>
+        </div>
+        <div class="item-amount">₹1,120</div>
+    </div>
+
+    <div class="top-item">
+        <div class="d-flex align-items-center">
+            <div class="rank-badge">#4</div>
+            <div>
+                <div class="item-name">Coffee</div>
+                <div class="item-sub">22 sold</div>
+            </div>
+        </div>
+        <div class="item-amount">₹440</div>
+    </div>
+
+</div>
+
+<script>
+/* Filter Chip Active Toggle */
+function setFilter(el) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+
+    // Later you can call API here:
+    // loadReports('today/week/month');
+}
+</script>
+
+</body>
+</html>

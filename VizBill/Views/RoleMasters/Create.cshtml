@@ -1,4 +1,4 @@
-﻿@model VizBill.MasterDbContext.TblInnoRoleMaster
+﻿@* @model VizBill.MasterDbContext.TblInnoRoleMaster
 
 @{
     ViewData["Title"] = "Create";
@@ -18,7 +18,7 @@
                 <input asp-for="RoleName" class="form-control" />
                 <span asp-validation-for="RoleName" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -32,4 +32,155 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+
+ @model VizBill.MasterDbContext.TblInnoRoleMaster
+
+@{
+    ViewData["Title"] = "Create Role";
+    Layout = "~/Views/Shared/_Layout_1.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-12">
+
+            <div class="pos-form-card">
+                <div class="pos-form-header">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-badge me-2"></i> Create Role
+                    </h4>
+                </div>
+
+                <div class="pos-form-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="RoleName" class="form-label fw-semibold"></label>
+                            <input asp-for="RoleName" class="form-control pos-input" placeholder="Enter role name" />
+                            <span asp-validation-for="RoleName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-pos-outline">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+
+                            <button type="submit" class="btn btn-pos-primary">
+                                <i class="bi bi-check-circle"></i> Create
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* =========================
+               ORANGE POS FORM THEME
+               (Same as User Module)
+            ========================= */
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-dark: #e65c00;
+        --pos-bg: #fff7f0;
+        --pos-border: #ffe2cc;
+    }
+
+    body {
+        background-color: var(--pos-bg);
+    }
+
+    /* Card */
+    .pos-form-card {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid var(--pos-border);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    /* Header */
+    .pos-form-header {
+        background: linear-gradient(135deg, var(--pos-orange), var(--pos-orange-dark));
+        color: #fff;
+        padding: 16px 20px;
+        font-weight: 600;
+    }
+
+    /* Body */
+    .pos-form-body {
+        padding: 20px;
+    }
+
+    /* Inputs */
+    .pos-input {
+        border-radius: 10px;
+        border: 1px solid var(--pos-border);
+        padding: 10px 12px;
+    }
+
+        .pos-input:focus {
+            border-color: var(--pos-orange);
+            box-shadow: 0 0 0 0.15rem rgba(255, 107, 0, 0.2);
+        }
+
+    /* Primary Button (Orange) */
+    .btn-pos-primary {
+        background-color: var(--pos-orange);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 8px 18px;
+    }
+
+        .btn-pos-primary:hover {
+            background-color: var(--pos-orange-dark);
+            color: #fff;
+        }
+
+    /* Outline Button */
+    .btn-pos-outline {
+        border: 1.5px solid var(--pos-orange);
+        color: var(--pos-orange);
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 8px 18px;
+    }
+
+        .btn-pos-outline:hover {
+            background-color: var(--pos-orange);
+            color: #fff;
+        }
+
+    /* Mobile Optimization */
+    @@media (max-width: 768px) {
+        .pos-form-card {
+            margin-top: 10px;
+            border-radius: 12px;
+        }
+
+        .pos-form-header {
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .pos-form-body {
+            padding: 16px;
+        }
+    }
+</style>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

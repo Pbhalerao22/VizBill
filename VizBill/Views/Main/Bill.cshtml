@@ -1,0 +1,802 @@
+﻿<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    /* ===============================
+       ORANGE POS THEME (Mobile First)
+    =================================*/
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-light: #fff3eb;
+        --pos-bg: #f5f6f8;
+        --card-border: #e9ecef;
+        --text-muted: #6c757d;
+    }
+
+    body {
+        background: var(--pos-bg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Wrapper */
+    .app-wrapper {
+        max-width: 1200px;
+        margin: auto;
+        padding: 12px;
+        padding-bottom: 90px; /* space for bottom nav */
+    }
+
+    /* Topbar */
+    .topbar {
+        background: #fff;
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--card-border);
+        margin-bottom: 14px;
+    }
+
+    .shop-name {
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .online-badge {
+        background: #e6f7ed;
+        color: #198754;
+        font-size: 12px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    /* Category Chips */
+    .category-scroll {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 6px;
+        margin-bottom: 14px;
+    }
+
+    .category-chip {
+        border: none;
+        background: #fff;
+        padding: 10px 16px;
+        border-radius: 25px;
+        font-weight: 500;
+        margin-right: 8px;
+        border: 1px solid var(--card-border);
+        transition: 0.2s;
+    }
+
+        .category-chip.active {
+            background: var(--pos-orange);
+            color: #fff;
+            border-color: var(--pos-orange);
+        }
+
+        .category-chip:hover {
+            background: var(--pos-orange-light);
+        }
+
+    /* Item Card */
+    .item-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 16px;
+        border: 1px solid var(--card-border);
+        transition: 0.2s ease;
+        cursor: pointer;
+        height: 100%;
+    }
+
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+    .item-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .badge-drinks {
+        background: #e7f0ff;
+        color: #0d6efd;
+    }
+
+    .badge-snacks {
+        background: #fff1e6;
+        color: #fd7e14;
+    }
+
+    .badge-fastfood {
+        background: #e8f8f0;
+        color: #198754;
+    }
+
+    .item-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+
+    .item-price {
+        color: var(--pos-orange);
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-top: 1px solid var(--card-border);
+        padding: 8px 0;
+        z-index: 999;
+    }
+
+    .nav-item-custom {
+        text-align: center;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+        .nav-item-custom i {
+            font-size: 20px;
+            display: block;
+        }
+
+    .nav-active {
+        color: var(--pos-orange);
+        font-weight: 600;
+    }
+
+    /* Responsive Grid spacing */
+    @@media (max-width: 576px) {
+        .item-name {
+            font-size: 15px;
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /* Selected Item (like your image) */
+    .item-card {
+        position: relative;
+        cursor: pointer;
+        transition: 0.2s ease;
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        padding: 18px;
+        background: #fff;
+    }
+
+        .item-card.selected {
+            border: 2px solid #ff6b00;
+            background: #fff3eb;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+    /* Quantity Bubble (top right) */
+    .qty-badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ff6b00;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        min-width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Bottom Cart Bar */
+    .cart-bar {
+        position: fixed;
+        bottom: 70px; /* above bottom nav */
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 32px);
+        max-width: 1100px;
+        background: #ff6b00;
+        color: #fff;
+        border-radius: 18px;
+        padding: 16px 20px;
+        font-weight: 600;
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        z-index: 999;
+    }
+
+    .cart-total {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+
+    /* =========================
+           OVERLAY
+        ========================= */
+    .bill-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        display: none;
+        z-index: 1000;
+    }
+
+    /* =========================
+           BOTTOM SHEET (BILL)
+        ========================= */
+    .bill-sheet {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-radius: 20px 20px 0 0;
+        padding: 16px;
+        z-index: 1001;
+        transition: 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+        .bill-sheet.active {
+            bottom: 0;
+        }
+
+    .bill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .close-bill {
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* =========================
+           BILL ITEMS
+        ========================= */
+    .bill-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-name {
+        font-weight: 600;
+    }
+
+    .qty-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 10px;
+        background: #f1f1f1;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .qty-btn.plus {
+            background: #ff6b00;
+            color: #fff;
+        }
+
+    /* =========================
+           PAYMENT MODE
+        ========================= */
+    .payment-mode {
+        display: flex;
+        gap: 12px;
+        margin: 15px 0;
+    }
+
+    .pay-btn {
+        flex: 1;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background: #f1f1f1;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .pay-btn.active {
+            background: #28a745;
+            color: #fff;
+        }
+
+    /* =========================
+           TOTAL + GENERATE BUTTON
+        ========================= */
+    .bill-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .generate-btn {
+        width: 100%;
+        background: #ff6b00;
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 14px;
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+</style>
+
+
+<div class="app-wrapper">
+
+    <!-- CART BAR (BOTTOM) -->
+    <div class="cart-bar" id="cartBar">
+        <div id="cartCount">0 items</div>
+        <div class="cart-total">₹<span id="cartTotal">0</span> →</div>
+    </div>
+
+    <!-- BILL BOTTOM SHEET -->
+    <div class="bill-overlay" id="billOverlay"></div>
+
+    <div class="bill-sheet" id="billSheet">
+        <div class="bill-header">
+            <h5>Your Bill</h5>
+            <span class="close-bill" id="closeBill">✕</span>
+        </div>
+
+        <div class="bill-items" id="billItems">
+            <!-- Dynamic Items will come here -->
+        </div>
+
+        <!-- Payment Mode -->
+        <div class="payment-mode">
+            <button class="pay-btn active" data-mode="Cash">💵 Cash</button>
+            <button class="pay-btn" data-mode="UPI">📱 UPI</button>
+        </div>
+
+        <!-- Total -->
+        <div class="bill-total">
+            <span>Total</span>
+            <span class="total-amount">₹<span id="finalTotal">0</span></span>
+        </div>
+
+        <!-- Generate Bill -->
+        <button class="generate-btn" id="generateBillBtn">
+            Generate Bill
+        </button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Top Bar -->
+    <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="shop-name">
+            Raju Tea Corner <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="online-badge">
+            <i class="bi bi-wifi"></i> Online
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-scroll">
+    @*     <button class="category-chip active" onclick="filterItems('all')">All</button>
+        <button class="category-chip" onclick="filterItems('drinks')">Drinks</button>
+        <button class="category-chip" onclick="filterItems('snacks')">Snacks</button>
+        <button class="category-chip" onclick="filterItems('fastfood')">Fast Food</button> *@
+
+        <button class="category-chip active" onclick="filterItems('all',this)">All</button>
+        @foreach (var item in ViewBag.ItemList)
+        {
+            <button class="category-chip" onclick="filterItems('@item.CategoryName',this)">@item.CategoryName</button>
+        }
+    </div>
+
+    <!-- Items Grid -->
+    <div class="row g-3" id="itemsGrid">
+
+        <!-- Item -->
+        @foreach (var item in ViewBag.ItemList)
+        {
+            <div class="col-12 col-sm-6 col-lg-4 item" data-category="@item.CategoryName">
+                <div class="item-card">
+                    <span class="item-badge badge-drinks">@item.CategoryName</span>
+                    <div class="item-name">@item.ItemName</div>
+                    <div class="item-price">@item.Price</div>
+                    <div class="item-id d-none">@item.ItemId</div>
+                </div>
+            </div>
+        }
+        @*   <div class="col-12 col-sm-6 col-lg-4 item" data-category="drinks">
+        <div class="item-card">
+        <span class="item-badge badge-drinks">Drinks</span>
+        <div class="item-name">Chai</div>
+        <div class="item-price">₹15</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="drinks">
+        <div class="item-card">
+        <span class="item-badge badge-drinks">Drinks</span>
+        <div class="item-name">Coffee</div>
+        <div class="item-price">₹20</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="snacks">
+        <div class="item-card">
+        <span class="item-badge badge-snacks">Snacks</span>
+        <div class="item-name">Samosa</div>
+        <div class="item-price">₹15</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="snacks">
+        <div class="item-card">
+        <span class="item-badge badge-snacks">Snacks</span>
+        <div class="item-name">Vada Pav</div>
+        <div class="item-price">₹20</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="fastfood">
+        <div class="item-card">
+        <span class="item-badge badge-fastfood">Fast Food</span>
+        <div class="item-name">Sandwich</div>
+        <div class="item-price">₹40</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="fastfood">
+        <div class="item-card">
+        <span class="item-badge badge-fastfood">Fast Food</span>
+        <div class="item-name">Maggi</div>
+        <div class="item-price">₹30</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="fastfood">
+        <div class="item-card">
+        <span class="item-badge badge-fastfood">Fast Food</span>
+        <div class="item-name">Bread Omelette</div>
+        <div class="item-price">₹35</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="drinks">
+        <div class="item-card">
+        <span class="item-badge badge-drinks">Drinks</span>
+        <div class="item-name">Lemon Soda</div>
+        <div class="item-price">₹20</div>
+        </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 item" data-category="snacks">
+        <div class="item-card">
+        <span class="item-badge badge-snacks">Snacks</span>
+        <div class="item-name">Bun Maska</div>
+        <div class="item-price">₹25</div>
+        </div>
+        </div>
+        *@
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    function filterItems(category, el) {
+        const items = document.querySelectorAll('.item');
+        const chips = document.querySelectorAll('.category-chip');
+
+        
+
+        console.log("e", el);
+        console.log("items", items);
+        console.log("chips", chips);
+
+        chips.forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+
+
+
+        items.forEach(item => {
+
+            console.log("item.dataset.category", item.dataset.category);
+            console.log("category", category);
+
+
+            if (category === 'all' || item.dataset.category === category) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+<script>
+    let cart = {}; // SINGLE SOURCE OF TRUTH
+    let selectedPayment = "Cash";
+
+    // ===============================
+    // ADD ITEM FROM CARD CLICK
+    // ===============================
+    $(document).on('click', '.item-card', function () {
+
+        const card = $(this);
+        const name = card.find('.item-name').text().trim();
+        const priceText = card.find('.item-price').text().replace('₹', '');
+        const price = parseInt(priceText);
+
+        const itemId = card.find('.item-id').text().trim();
+
+        console.log("itemId", itemId);
+
+        if (cart[name]) {
+            cart[name].qty += 1;
+        } else {
+            cart[name] = {
+                name: name,
+                price: price,
+                qty: 1,
+                itemid: itemId
+            };
+        }
+
+        // UI Selected Style
+        card.addClass('selected');
+        card.find('.qty-badge').remove();
+        card.append(`<div class="qty-badge">${cart[name].qty}</div>`);
+
+        updateCartBar();
+    });
+
+    // ===============================
+    // UPDATE CART BAR (BOTTOM)
+    // ===============================
+    function updateCartBar() {
+        let totalItems = 0;
+        let totalAmount = 0;
+
+        for (let key in cart) {
+            totalItems += cart[key].qty;
+            totalAmount += cart[key].price * cart[key].qty;
+        }
+
+        if (totalItems > 0) {
+            $('#cartBar').fadeIn(150);
+            $('#cartCount').text(totalItems + ' items');
+            $('#cartTotal').text(totalAmount);
+        } else {
+            $('#cartBar').fadeOut(150);
+        }
+    }
+
+    // ===============================
+    // OPEN BILL SHEET ON CART CLICK
+    // ===============================
+    $('#cartBar').on('click', function () {
+        $('#billSheet').addClass('active');
+        $('#billOverlay').show();
+        renderBill();
+    });
+
+    // CLOSE BILL
+    $('#closeBill, #billOverlay').on('click', function () {
+        $('#billSheet').removeClass('active');
+        $('#billOverlay').hide();
+    });
+
+    // ===============================
+    // RENDER BILL ITEMS (FROM SAME CART)
+    // ===============================
+    function renderBill() {
+        let html = "";
+        let total = 0;
+
+        for (let key in cart) {
+            let item = cart[key];
+            let itemTotal = item.price * item.qty;
+            total += itemTotal;
+
+            html += `
+                    <div class="bill-item">
+                        <div>
+                            <div class="item-name">${item.name}</div>
+                            <small>₹${item.price} × ${item.qty}</small>
+                        </div>
+
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="decreaseQty('${item.name}')">−</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn plus" onclick="increaseQty('${item.name}')">+</button>
+                        </div>
+
+                        <div><b>₹${itemTotal}</b></div>
+                    </div>`;
+        }
+
+        $('#billItems').html(html);
+        $('#finalTotal').text(total);
+        $('#cartTotal').text(total);
+    }
+
+    // ===============================
+    // INCREASE QTY (FROM BILL SHEET)
+    // ===============================
+    function increaseQty(name) {
+        if (cart[name]) {
+            cart[name].qty++;
+        }
+
+        updateItemBadge(name);
+        updateCartBar();
+        renderBill();
+    }
+
+    // ===============================
+    // DECREASE QTY (REMOVE IF 0)
+    // ===============================
+    function decreaseQty(name) {
+        if (!cart[name]) return;
+
+        cart[name].qty--;
+
+        if (cart[name].qty <= 0) {
+            delete cart[name];
+            // Remove badge + selected class from card
+            $('.item-card').each(function () {
+                const cardName = $(this).find('.item-name').text().trim();
+                if (cardName === name) {
+                    $(this).removeClass('selected');
+                    $(this).find('.qty-badge').remove();
+                }
+            });
+        } else {
+            updateItemBadge(name);
+        }
+
+        updateCartBar();
+        renderBill();
+    }
+
+    // ===============================
+    // UPDATE BADGE ON ITEM CARD
+    // ===============================
+    function updateItemBadge(name) {
+        $('.item-card').each(function () {
+            const cardName = $(this).find('.item-name').text().trim();
+            if (cardName === name) {
+                $(this).find('.qty-badge').remove();
+                $(this).append(`<div class="qty-badge">${cart[name].qty}</div>`);
+            }
+        });
+    }
+
+    // ===============================
+    // PAYMENT MODE SELECTION
+    // ===============================
+    $(document).on('click', '.pay-btn', function () {
+        $('.pay-btn').removeClass('active');
+        $(this).addClass('active');
+        selectedPayment = $(this).data('mode');
+    });
+
+    // ===============================
+    // GENERATE BILL (ASP.NET READY)
+    // ===============================
+    $('#generateBillBtn').on('click', function () {
+
+        if (Object.keys(cart).length === 0) {
+            alert("Cart is empty!");
+            return;
+        }
+
+        let finalTotal = $('#finalTotal').text();
+
+        // Convert cart object to array (for API)
+        let cartItems = Object.values(cart);
+
+        console.log("Cart Items:", cartItems);
+        console.log("Payment Mode:", selectedPayment);
+        console.log("Total:", finalTotal);
+
+        // If separate page:
+        // window.location.href = '/Main/GeneratedBillScreen?amt='+ encodeURIComponent(finalTotal) + '&mode='+ encodeURIComponent(selectedPayment);
+
+        // CALL YOUR ASP.NET API HERE
+
+        $.ajax({
+            url: '/Main/GeneratedBill',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                Cart: cartItems,
+                Mode: selectedPayment,
+                Amt: finalTotal
+            }),
+            success: function (res) {
+
+                console.log("res", res);
+
+
+                if (res.success) {
+                    alert("Bill Generated Successfully!");
+                    window.location.href = '/Main/GeneratedBillScreen?amt=' + encodeURIComponent(res.totalAmt) + '&mode=' + encodeURIComponent(res.paymentMode) + '&billtoken=' + encodeURIComponent(res.token);
+                }
+                else {
+                    alert("Something went wrong");
+                }
+                
+            },
+            error: function (err) {
+
+                console.log(err)
+            }
+
+        });
+
+
+        // alert("Bill Generated!\nPayment: " + selectedPayment + "\nTotal: ₹" + finalTotal);
+    });
+</script>
+

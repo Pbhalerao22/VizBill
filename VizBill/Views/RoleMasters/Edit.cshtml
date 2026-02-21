@@ -1,39 +1,146 @@
 ﻿@model VizBill.MasterDbContext.TblInnoRoleMaster
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<style>
+    /* ============================
+       SMART BILLING POS ORANGE THEME
+       (Same as Previous Modules)
+    ============================ */
 
-@* <h4>TblInnoRoleMaster</h4> *@
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RoleId" />
-            <div class="form-group">
-                <label asp-for="RoleName" class="control-label"></label>
-                <input asp-for="RoleName" class="form-control" />
-                <span asp-validation-for="RoleName" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-           
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-dark: #e65c00;
+        --pos-bg: #fff7f0;
+        --pos-border: #ffe2cc;
+    }
+
+    body {
+        background-color: var(--pos-bg);
+    }
+
+    /* Center container in Web Mode */
+    .pos-page-container {
+        max-width: 520px;
+        margin: auto;
+    }
+
+    /* POS Card */
+    .pos-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid var(--pos-border);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        padding: 20px;
+    }
+
+    /* Header */
+    .pos-title {
+        font-weight: 600;
+        color: var(--pos-orange-dark);
+        font-size: 20px;
+    }
+
+    /* Inputs */
+    .form-control {
+        border-radius: 10px;
+        padding: 10px 12px;
+        border: 1px solid #ffd9c2;
+    }
+
+    .form-control:focus {
+        border-color: var(--pos-orange);
+        box-shadow: 0 0 0 0.15rem rgba(255,107,0,0.15);
+    }
+
+    /* Checkbox */
+    .form-check-input:checked {
+        background-color: var(--pos-orange);
+        border-color: var(--pos-orange);
+    }
+
+    /* Buttons */
+    .btn-pos {
+        background-color: var(--pos-orange);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .btn-pos:hover {
+        background-color: var(--pos-orange-dark);
+        color: #fff;
+    }
+
+    .btn-back {
+        border-radius: 10px;
+        border: 1px solid var(--pos-border);
+        background: #fff;
+        padding: 10px 18px;
+        font-weight: 500;
+    }
+
+    .btn-back:hover {
+        background: #fff3eb;
+        border-color: var(--pos-orange);
+        color: var(--pos-orange-dark);
+    }
+
+    /* Mobile spacing */
+    @@media (max-width: 576px) {
+        .pos-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-3">
+    <div class="pos-page-container">
+
+        <!-- Header -->
+        <div class="mb-3">
+            <h4 class="pos-title mb-1">✏️ Edit Role</h4>
+            <small class="text-muted">Update role details</small>
+        </div>
+
+        <!-- POS Card Form -->
+        <div class="pos-card">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <input type="hidden" asp-for="RoleId" />
+
+                <!-- Role Name -->
+                <div class="mb-3">
+                    <label asp-for="RoleName" class="form-label fw-semibold"></label>
+                    <input asp-for="RoleName" class="form-control" placeholder="Enter Role Name" />
+                    <span asp-validation-for="RoleName" class="text-danger small"></span>
+                </div>
+
+                <!-- Is Deleted -->
+                <div class="mb-3 form-check">
+                    <input class="form-check-input" asp-for="IsDeleted" />
+                    <label class="form-check-label fw-semibold" asp-for="IsDeleted">
+                        @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Index" class="btn btn-back">
+                        ← Back to List
+                    </a>
+                    <input type="submit" value="Save Changes" class="btn btn-pos" />
+                </div>
+            </form>
+        </div>
+
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

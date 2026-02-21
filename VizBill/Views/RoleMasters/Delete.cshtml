@@ -1,58 +1,203 @@
 ﻿@model VizBill.MasterDbContext.TblInnoRoleMaster
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<style>
+    /* ============================
+       SMART BILLING POS ORANGE THEME
+       (Consistent CRUD Design)
+    ============================ */
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>TblInnoRoleMaster</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="RoleId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-dark: #e65c00;
+        --pos-bg: #fff7f0;
+        --pos-border: #ffe2cc;
+        --pos-danger: #ff3b30;
+    }
+
+    body {
+        background-color: var(--pos-bg);
+    }
+
+    /* Center Container (Web Mode) */
+    .pos-page-container {
+        max-width: 520px;
+        margin: auto;
+    }
+
+    /* Card */
+    .pos-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid var(--pos-border);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        padding: 20px;
+    }
+
+    /* Title */
+    .pos-title {
+        font-weight: 600;
+        color: var(--pos-orange-dark);
+        font-size: 20px;
+    }
+
+    /* Warning Box */
+    .pos-warning {
+        background: #fff3f2;
+        border: 1px solid #ffd6d3;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 14px;
+        color: #b42318;
+        font-weight: 500;
+    }
+
+    /* Detail rows */
+    .pos-detail-row {
+        padding: 10px 0;
+        border-bottom: 1px solid #fff1e6;
+    }
+
+    .pos-detail-label {
+        font-weight: 600;
+        color: #444;
+        font-size: 14px;
+    }
+
+    .pos-detail-value {
+        font-size: 14px;
+        color: #222;
+        text-align: right;
+        word-break: break-word;
+    }
+
+    /* Buttons */
+    .btn-pos-danger {
+        background-color: var(--pos-danger);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .btn-pos-danger:hover {
+        background-color: #d92d20;
+        color: #fff;
+    }
+
+    .btn-back {
+        border-radius: 10px;
+        border: 1px solid var(--pos-border);
+        background: #fff;
+        padding: 10px 18px;
+        font-weight: 500;
+    }
+
+    .btn-back:hover {
+        background: #fff3eb;
+        border-color: var(--pos-orange);
+        color: var(--pos-orange-dark);
+    }
+
+    @@media (max-width: 576px) {
+        .pos-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-3">
+    <div class="pos-page-container">
+
+        <!-- Header -->
+        <div class="mb-3">
+            <h4 class="pos-title mb-1">🗑️ Delete Role</h4>
+            <small class="text-muted">Confirm before deleting this role</small>
+        </div>
+
+        <!-- Card -->
+        <div class="pos-card">
+
+            <!-- Warning -->
+            <div class="pos-warning mb-3">
+                ⚠️ Are you sure you want to delete this role?
+            </div>
+
+            <!-- Details -->
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.RoleName)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.IsDeleted)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.CreatedOn)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.CreatedOn)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.CreatedBy)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.ModifiedOn)
+                </div>
+            </div>
+
+            <div class="pos-detail-row d-flex justify-content-between border-0">
+                <div class="pos-detail-label">
+                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                </div>
+                <div class="pos-detail-value">
+                    @Html.DisplayFor(model => model.ModifiedBy)
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="RoleId" />
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-back">
+                        ← Back to List
+                    </a>
+
+                    <button type="submit" class="btn btn-pos-danger">
+                        🗑️ Delete Role
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
 </div>

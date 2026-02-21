@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,7 +18,7 @@
     <script src="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css"></script>
 
 
-    <style>
+    @* <style>
         /* Reset */
         * {
             margin: 0;
@@ -71,7 +77,133 @@
                 color: #ff6600;
             }
 
-    </style>
+    </style> *@
+    <style>
+    /* ============================
+       SMART POS ORANGE THEME - FINAL
+       Mobile First Bottom Navigation
+    ============================ */
+
+    /* Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-orange-light: #fff3eb;
+        --pos-text: #6c757d;
+        --pos-bg: #f8f9fa;
+        --pos-border: #e9ecef;
+    }
+
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--pos-bg);
+        padding-bottom: 75px; /* Prevent content hiding behind bottom nav */
+    }
+
+    /* Main Container */
+    .container {
+        max-width: 480px; /* Mobile centered layout (POS Style) */
+        margin: 0 auto;
+        padding: 12px;
+    }
+
+    /* ============================
+       BOTTOM NAVIGATION (POS STYLE)
+    ============================ */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: #ffffff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 1px solid var(--pos-border);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.06);
+        z-index: 999;
+    }
+
+    /* Nav Item */
+    .nav-item {
+        text-decoration: none;
+        color: var(--pos-text);
+        font-size: 11px;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: all 0.25s ease;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 3px;
+        transition: all 0.25s ease;
+    }
+
+    .nav-item span {
+        font-size: 11px;
+        line-height: 1;
+    }
+
+    /* Hover (Desktop fallback) */
+    .nav-item:hover {
+        color: var(--pos-orange);
+    }
+
+    /* ============================
+       ACTIVE MENU HIGHLIGHT (KEY)
+    ============================ */
+    .nav-item.active {
+        color: var(--pos-orange);
+        font-weight: 600;
+        background: var(--pos-orange-light);
+    }
+
+    .nav-item.active i {
+        color: var(--pos-orange);
+        transform: scale(1.15);
+    }
+
+    /* Top Indicator Line (Premium POS Feel) */
+    .nav-item.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 32px;
+        height: 4px;
+        background: var(--pos-orange);
+        border-radius: 0 0 8px 8px;
+    }
+
+    /* Tap Effect for Mobile */
+    .nav-item:active {
+        transform: scale(0.95);
+    }
+
+    /* Small Devices Optimization */
+    @@media (max-width: 360px) {
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item span {
+            font-size: 10px;
+        }
+    }
+</style>
+
 
     <script>
         const links = document.querySelectorAll('.nav-item');
@@ -85,6 +217,7 @@
 </head>
 <body>
     <header>
+        @RenderSection("Styles", required: false)
         @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white  fixed-bottom border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VizBill</a>
@@ -115,32 +248,67 @@
         </nav> *@
 
         <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <a href="index.html" class="nav-item active">
+        @* <div class="bottom-nav">
+            <a href="/Main/Home" class="nav-item active">
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
             </a>
 
-            <a href="billing.html" class="nav-item">
+            <a href="/Main/Bill" class="nav-item">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
                 <span>Billing</span>
             </a>
 
-            <a href="items.html" class="nav-item">
+            <a href="/Main/Item" class="nav-item">
                 <i class="fa-solid fa-box"></i>
                 <span>Items</span>
             </a>
 
-            <a href="reports.html" class="nav-item">
+            <a href="/Main/Report" class="nav-item">
                 <i class="fa-solid fa-chart-column"></i>
                 <span>Reports</span>
             </a>
+
+            <a href="/Main/Setting" class="nav-item">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Setting</span>
+            </a>
+        </div> *@
+
+
+        <div class="bottom-nav">
+            <a href="/Main/Home" class="nav-item @(currentAction == "Home" ? "active" : "")">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+
+            <a href="/Main/Bill" class="nav-item @(currentAction == "Bill" ? "active" : "")">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Billing</span>
+            </a>
+
+            <a href="/Main/Item" class="nav-item @(currentAction == "Item" ? "active" : "")">
+                <i class="fa-solid fa-box"></i>
+                <span>Items</span>
+            </a>
+
+            <a href="/Main/Report" class="nav-item @(currentAction == "Report" ? "active" : "")">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="/Main/Setting" class="nav-item @(currentAction == "Setting" ? "active" : "")">
+                <i class="fa-solid fa-gear"></i>
+                <span>Setting</span>
+            </a>
         </div>
+
 
     </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            
         </main>
     </div>
 

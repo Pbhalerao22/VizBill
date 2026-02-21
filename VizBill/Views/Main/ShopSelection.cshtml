@@ -1,0 +1,208 @@
+﻿<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    /* ===============================
+               ORANGE POS THEME V1 (Mobile First)
+            =============================== */
+    :root {
+        --pos-orange: #ff6b00;
+        --pos-bg: #f3f3f3;
+        --pos-card: #ffffff;
+        --pos-border: #e9e9e9;
+        --pos-text: #2b2b2b;
+        --pos-subtext: #8a8a8a;
+    }
+
+    body {
+        margin: 0;
+        background: var(--pos-bg);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    /* Main Rounded Container */
+    .page-wrapper {
+        min-height: 100vh;
+        padding: 24px 16px 90px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .main-container {
+        width: 100%;
+        max-width: 500px;
+        background: #fff;
+        border-radius: 22px;
+        padding: 28px 18px 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    /* Header */
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--pos-text);
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: var(--pos-subtext);
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    /* Shop Card */
+    .shop-card {
+        background: var(--pos-card);
+        border: 1px solid var(--pos-border);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        transition: all 0.2s ease;
+    }
+
+        .shop-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        }
+
+    .shop-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    /* Icon Box */
+    .shop-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: #ffe9db;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: var(--pos-orange);
+    }
+
+    .shop-name {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--pos-text);
+        margin: 0;
+    }
+
+    .shop-type {
+        font-size: 14px;
+        color: var(--pos-subtext);
+        margin-top: 2px;
+    }
+
+    /* Status Pills */
+    .status-pill {
+        font-size: 13px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 999px;
+    }
+
+    .active {
+        background: #e6f7ec;
+        color: #1f9d55;
+    }
+
+    .trial {
+        background: #efe6ff;
+        color: #7c3aed;
+    }
+
+    .expired {
+        background: #ffe5e5;
+        color: #e53935;
+    }
+
+    /* Floating Add Button */
+    .fab-btn {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--pos-orange);
+        color: #fff;
+        font-size: 30px;
+        border: none;
+        box-shadow: 0 8px 20px rgba(255, 107, 0, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .fab-btn:hover {
+            background: #e65c00;
+        }
+
+    /* Desktop Centering */
+    @@media (min-width: 768px) {
+        .page-wrapper {
+            align-items: center;
+        }
+    }
+</style>
+
+
+<div class="page-wrapper">
+    <div class="main-container">
+
+        <div class="title">Your Shops</div>
+        <div class="subtitle">Select a shop to manage</div>
+
+        <!-- Shop 1 -->
+        <div class="shop-card">
+            <div class="shop-left">
+                <div class="shop-icon">🏪</div>
+                <div>
+                    <p class="shop-name">Raju Tea Corner</p>
+                    <div class="shop-type">🍵 Tea Stall</div>
+                </div>
+            </div>
+            <span class="status-pill active">Active</span>
+        </div>
+
+        <!-- Shop 2 -->
+        <div class="shop-card">
+            <div class="shop-left">
+                <div class="shop-icon">🏪</div>
+                <div>
+                    <p class="shop-name">Quick Bites Express</p>
+                    <div class="shop-type">🍔 Fast Food</div>
+                </div>
+            </div>
+            <span class="status-pill trial">Trial</span>
+        </div>
+
+        <!-- Shop 3 -->
+        <div class="shop-card">
+            <div class="shop-left">
+                <div class="shop-icon">🏪</div>
+                <div>
+                    <p class="shop-name">Fresh Juice Hub</p>
+                    <div class="shop-type">🧃 Juice</div>
+                </div>
+            </div>
+            <span class="status-pill expired">Expired</span>
+        </div>
+
+    </div>
+</div>
+
+<!-- Floating Add Button -->
+<button class="fab-btn">+</button>
+
