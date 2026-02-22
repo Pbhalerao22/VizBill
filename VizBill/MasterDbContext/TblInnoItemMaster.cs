@@ -29,7 +29,7 @@ public partial class TblInnoItemMaster
 
     public virtual TblInnoCategoryMaster? Category { get; set; }
 
-    public virtual TblInnoShopMaster? Shop { get; set; } = null!;
+    public virtual TblInnoShopMaster Shop { get; set; } = null!;
 
-    public virtual ICollection<TblInnoBillItemMapping>? TblInnoBillItemMappings { get; set; } = new List<TblInnoBillItemMapping>();
+    public virtual ICollection<TblInnoBillItemMapping> TblInnoBillItemMappings { get; set; } = new List<TblInnoBillItemMapping>();
 }

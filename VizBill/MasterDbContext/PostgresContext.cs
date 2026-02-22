@@ -451,6 +451,7 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .HasColumnName("name");
+            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
             entity.Property(e => e.ProfileImage).HasColumnName("profile_image");
         });
 

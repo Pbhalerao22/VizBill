@@ -27,6 +27,8 @@ public partial class TblInnoUserMaster
 
     public long? ModifiedBy { get; set; }
 
+    public string? PasswordHash { get; set; }
+
     public virtual ICollection<TblInnoShopMaster> TblInnoShopMasters { get; set; } = new List<TblInnoShopMaster>();
 
     public virtual ICollection<TblInnoShopSubscriptionMapping> TblInnoShopSubscriptionMappings { get; set; } = new List<TblInnoShopSubscriptionMapping>();
