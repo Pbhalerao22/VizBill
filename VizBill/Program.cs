@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using VizBill.MasterDbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,17 +25,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(options =>
 {
-    options.ClientId = Encoding.UTF8.GetString(
-        Convert.FromBase64String(
-            builder.Configuration["Authentication:Google:ClientId"]
-        )
-    );
-
-    options.ClientSecret = Encoding.UTF8.GetString(
-        Convert.FromBase64String(
-            builder.Configuration["Authentication:Google:ClientSecret"]
-        )
-    );
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 });
 builder.Services.AddHttpContextAccessor();
 
