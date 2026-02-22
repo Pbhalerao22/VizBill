@@ -1,25 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using VizBill.MasterDbContext;
 using VizBill.Models;
 
 namespace VizBill.Controllers
 {
+    [Authorize]
     public class MainController : Controller
     {
         private readonly PostgresContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MainController(PostgresContext context)
+        public MainController(PostgresContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IActionResult> Home()
         {
             try
             {
-                int userCode = 1;
-                var ShopiId = await _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefaultAsync();
+                var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+                int? userId = userIdClaim != null? int.Parse(userIdClaim.Value): (int?)null;
+
+                var ShopiId = await _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userId).Select(s => s.ShopId).FirstOrDefaultAsync();
 
 
 
@@ -75,8 +84,11 @@ namespace VizBill.Controllers
 
         public IActionResult Bill()
         {
-            int userCode = 1;
-            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefault();
+             var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+            int? userId = userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
+
+            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userId).Select(s => s.ShopId).FirstOrDefault();
 
             var ListItem = (from s in _context.TblInnoItemMasters
                             join ca in _context.TblInnoCategoryMasters on s.CategoryId equals ca.CategoryId
@@ -108,10 +120,12 @@ namespace VizBill.Controllers
 
             try
             {
-                int userCode = 1;
+                var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+                int? userId = userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
 
                 var shopId = await _context.TblInnoShopMasters
-                    .Where(w => w.OwnerUserId == userCode)
+                    .Where(w => w.OwnerUserId == userId)
                     .Select(s => s.ShopId)
                     .FirstOrDefaultAsync();
 
@@ -144,7 +158,7 @@ namespace VizBill.Controllers
                     Quantity = item.qty,
                     Total = (decimal)item.price * item.qty,
                     CreatedOn = DateTime.Today,
-                    CreatedBy = 1
+                    CreatedBy = userId
                 }).ToList();
 
                 await _context.TblInnoBillItemMappings.AddRangeAsync(billItems);
@@ -165,75 +179,12 @@ namespace VizBill.Controllers
             }
         }
 
-
-        //public ActionResult GeneratedBill([FromBody]BillViewModel model)
-        //{
-        //    if (model != null)
-        //    {
-        //        try
-        //        {
-        //            int userCode = 1;
-        //            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefault();
-
-        //            Random tok = new Random();
-        //            var Token = tok.Next();
-
-        //            TblInnoBillMaster n = new TblInnoBillMaster();
-
-        //            n.ShopId = ShopiId;
-        //            n.BillNumber = Token.ToString();
-        //            n.TotalAmount = model.Amt;
-        //            n.PaymentModeId = 1;
-        //            n.BillDate = DateTime.Today;
-        //            n.CustomerMobile = null;
-        //            n.CreatedOn = DateTime.Today;
-        //            n.CreatedBy = 1;
-
-        //            _context.TblInnoBillMasters.Add(n);
-        //            _context.SaveChanges();
-
-        //            long generatedBillId = n.BillId;
-
-
-
-        //            foreach (var item in model.Cart)
-        //            {
-        //                TblInnoBillItemMapping bm = new TblInnoBillItemMapping();
-
-        //                bm.BillId = generatedBillId ;
-        //                bm.ItemId = Convert.ToInt32(item.itemid);
-        //                bm.ItemName = item.name;
-        //                bm.Price = item.price;
-        //                bm.Total = (decimal)item.price*item.qty;
-        //                bm.Quantity = item.qty;
-        //                bm.CreatedOn= DateTime.Today;
-        //                bm.CreatedBy=1;
-
-        //                _context.TblInnoBillItemMappings.Add(bm);
-        //                _context.SaveChanges();
-
-        //            }
-
-
-        //            return Json(new { success = true,token= Token.ToString(),TotalAmt= model.Amt,PaymentMode=model.Mode });
-
-        //        }
-        //        catch (Exception)
-        //        {
-
-        //            return Json(new { success = false });
-        //        }
-
-
-        //    }
-
-        //    return Json(new { success = false });
-        //}
-
         public IActionResult Item()
         {
-            int userCode = 1;
-            var ShopiId = 2;//_context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => s.ShopId).FirstOrDefault();
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+            int? userId = userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
+            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userId).Select(s => s.ShopId).FirstOrDefault();
 
             var ListItem = (from s in _context.TblInnoItemMasters
                             join ca in _context.TblInnoCategoryMasters on s.CategoryId equals ca.CategoryId
@@ -256,9 +207,12 @@ namespace VizBill.Controllers
 
         public IActionResult Setting()
         {
-            int userCode = 1;
-            int ShopId = 2;
-            ViewBag.ShopDetails=_context.TblInnoShopMasters.Where(w=>w.OwnerUserId== userCode && w.ShopId== ShopId).Select(s=>new {s.ShopId,s.ShopName,s.CompanyLogo,s.AdvertisementMsg,s.WhatsappNumber}).ToList();
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+            int? userId = userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
+            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userId).Select(s => s.ShopId).FirstOrDefault();
+
+            ViewBag.ShopDetails=_context.TblInnoShopMasters.Where(w=>w.OwnerUserId== userId && w.ShopId== ShopiId).Select(s=>new {s.ShopId,s.ShopName,s.CompanyLogo,s.AdvertisementMsg,s.WhatsappNumber}).ToList();
 
            
             return View();
@@ -266,8 +220,11 @@ namespace VizBill.Controllers
 
         public IActionResult ShopSelection()
         {
-            int userCode = 1;
-            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userCode).Select(s => new { s.ShopId,s.ShopName,s.ShopCategory,s.IsActive}).ToList();
+
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+
+            int? userId = userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
+            var ShopiId = _context.TblInnoShopMasters.Where(w => w.OwnerUserId == userId).Select(s => new { s.ShopId,s.ShopName,s.ShopCategory,s.IsActive}).ToList();
 
             ViewBag.OwnerShops = ShopiId;
             return View();

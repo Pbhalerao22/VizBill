@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using VizBill.MasterDbContext;
 
 namespace VizBill.Controllers
 {
+    [Authorize]
     public class UserMastersController : Controller
     {
         private readonly PostgresContext _context;
@@ -86,7 +88,7 @@ namespace VizBill.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Name,Email,GoogleId,IsActive")] TblInnoUserMaster model,
+            [Bind("Name,Email,IsActive")] TblInnoUserMaster model, string? Password,
             IFormFile? imageFile)
         {
             if (ModelState.IsValid)
@@ -100,7 +102,12 @@ namespace VizBill.Controllers
                         model.ProfileImage = ms.ToArray();
                     }
                 }
-
+                // Password Hashing
+                if (!string.IsNullOrWhiteSpace(Password))
+                {
+                    var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<TblInnoUserMaster>();
+                    model.PasswordHash = hasher.HashPassword(model, Password);
+                }
                 // System Managed Fields
                 model.CreatedOn = DateTime.Now;
                 model.CreatedBy = 1; // Replace with logged-in user id
@@ -137,7 +144,7 @@ namespace VizBill.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id,
-      [Bind("UserId,Name,Email,GoogleId,IsActive")] TblInnoUserMaster model,
+      [Bind("UserId,Name,Email,IsActive")] TblInnoUserMaster model, string? Password,
       IFormFile? imageFile)
         {
             if (id != model.UserId)
@@ -166,7 +173,12 @@ namespace VizBill.Controllers
                         existingUser.ProfileImage = ms.ToArray();
                     }
                 }
-
+                // Password Hashing
+                if (!string.IsNullOrWhiteSpace(Password))
+                {
+                    var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<TblInnoUserMaster>();
+                    model.PasswordHash = hasher.HashPassword(model, Password);
+                }
                 // System managed fields
                 existingUser.ModifiedOn = DateTime.Now;
                 existingUser.ModifiedBy = 1; // replace with logged-in user id
