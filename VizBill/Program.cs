@@ -1,40 +1,61 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using VizBill.MasterDbContext;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Required for Render (PORT binding)
 builder.WebHost.UseUrls($"http://0.0.0.0:{Environment.GetEnvironmentVariable("PORT") ?? "10000"}");
 
+// Add services
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new AuthorizeFilter());
 });
-builder.Services.AddDbContext<PostgresContext>(Options => Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<PostgresContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-}).AddCookie(options =>
+})
+.AddCookie(options =>
 {
     options.LoginPath = "/Auth/Login";
     options.AccessDeniedPath = "/Auth/AccessDenied";
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
     options.SlidingExpiration = true;
+
     options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 })
 .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+    // VERY IMPORTANT for Render
+    options.CorrelationCookie.SameSite = SameSiteMode.None;
+    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
 });
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+//CRITICAL: Forwarded Headers for Render / Reverse Proxy
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -45,6 +66,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -53,3 +75,59 @@ app.MapControllerRoute(
     pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
+
+//using Microsoft.AspNetCore.Authentication.Cookies;
+//using Microsoft.AspNetCore.Authentication.Google;
+//using Microsoft.AspNetCore.Mvc.Authorization;
+//using Microsoft.EntityFrameworkCore;
+//using VizBill.MasterDbContext;
+
+//var builder = WebApplication.CreateBuilder(args);
+//builder.WebHost.UseUrls($"http://0.0.0.0:{Environment.GetEnvironmentVariable("PORT") ?? "10000"}");
+
+//builder.Services.AddControllersWithViews(options =>
+//{
+//    options.Filters.Add(new AuthorizeFilter());
+//});
+//builder.Services.AddDbContext<PostgresContext>(Options => Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+//}).AddCookie(options =>
+//{
+//    options.LoginPath = "/Auth/Login";
+//    options.AccessDeniedPath = "/Auth/AccessDenied";
+//    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+//    options.SlidingExpiration = true;
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//})
+//.AddGoogle(options =>
+//{
+//    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+//    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+//});
+//builder.Services.AddHttpContextAccessor();
+
+//var app = builder.Build();
+
+//// Configure the HTTP request pipeline.
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    app.UseHsts();
+//}
+
+//app.UseHttpsRedirection();
+//app.UseStaticFiles();
+
+//app.UseRouting();
+//app.UseAuthentication();
+//app.UseAuthorization();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Login}/{action=Index}/{id?}");
+
+//app.Run();
